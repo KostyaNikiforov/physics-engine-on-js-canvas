@@ -1,3 +1,5 @@
 export interface ShapeProperties {
-  radius: number;
+  radius?: number;
+  direction?: number;
+  speed?: number;
 }
