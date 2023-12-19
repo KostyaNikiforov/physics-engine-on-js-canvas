@@ -49,14 +49,14 @@ export class CollisionService {
           const circle2Speed: number = getVectorMagnitude(otherCircle.velocity);
 
           const circle1Energy: number = (circle1Speed * Math.pow(circle.mass, 2)) / 2;
-          const circle2Energy: number = (circle2Speed * Math.pow(circle.mass, 2)) / 2;
+          const circle2Energy: number = (circle2Speed * Math.pow(otherCircle.mass, 2)) / 2;
 
           const sumOfEnergy: number = circle1Energy + circle2Energy;
 
           const circle1SpeedAfterCollision: number
-            = Math.sqrt((2 * sumOfEnergy) / Math.pow(Math.max(circle.mass, 1.5), 2));
+            = Math.sqrt((2 * sumOfEnergy) / Math.pow(circle.mass, 2));
           const circle2SpeedAfterCollision: number
-            = Math.sqrt((2 * sumOfEnergy) / Math.pow(Math.max(otherCircle.mass, 1.5), 2));
+            = Math.sqrt((2 * sumOfEnergy) / Math.pow(otherCircle.mass, 2));
 
           circle.velocity.x = vector1.x * circle1SpeedAfterCollision;
           circle.velocity.y = vector1.y * circle1SpeedAfterCollision;

@@ -1,33 +1,33 @@
 import {Injectable} from "@angular/core";
 import {ObjectStorageService} from "./object-storage.service";
 import {Circle} from "../model/circle";
+import {getVectorMagnitude} from "../common/util/vector.util";
+import {FPS} from "./canvas.component";
+import {Vector} from "../common/util/model/vector";
 
-const AIR_RESISTANCE = 0.999;
+const AIR_DENSITY = 1.225; // кг/м^3
+const RESISTANCE_COEFFICIENT = 0.47; // для шара
 
 @Injectable({
   providedIn: 'root'
 })
 export class AirResistanceService {
-  private airResistance: number = AIR_RESISTANCE;
+  private timeStep: number = 1 / FPS;
 
   constructor(
     private objectStorageService: ObjectStorageService,
   ) {
   }
 
-  setAirResistance(airResistance: number): void {
-    if (airResistance < 0 || airResistance > 1) {
-      throw new Error('Air resistance must be between 0 and 1');
-    }
-
-    this.airResistance = airResistance;
-  }
-
   updateVelocities(): void {
     this.objectStorageService.getAll().forEach(
       (circle: Circle): void => {
-        circle.velocity.x *= this.airResistance;
-        circle.velocity.y *= this.airResistance;
+        const circleSpeed: number = getVectorMagnitude(circle.velocity);
+        const resistanceForce: number = (AIR_DENSITY * circle.square * RESISTANCE_COEFFICIENT * Math.pow(circleSpeed, 2)) / 2;
+        const A: number = resistanceForce / circle.mass;
+
+        circle.velocity.x += A * -circle.velocity.x * this.timeStep;
+        circle.velocity.y += A * -circle.velocity.y * this.timeStep;
       }
     );
   }

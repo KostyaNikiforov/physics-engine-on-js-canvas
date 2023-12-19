@@ -24,7 +24,7 @@ export const CANVAS_PROPERTY = {
   width: WORLD_PROPERTY.width * PX_IN_METERS,
   height: WORLD_PROPERTY.height * PX_IN_METERS,
 }
-export const FPS = 120;
+export const FPS = 60;
 export const FRAME_TIME = 1000 / FPS;
 
 export function toMeter(px: number): number {
@@ -140,7 +140,7 @@ export class CanvasComponent implements AfterViewInit {
         ShapeType.circle,
         this.mouseEventToPosition(event),
         {
-          radius: Math.random() + 0.2,
+          radius: Math.random() + 0.3,
           speed: Math.random() * 4 + 1,
           direction: Math.random() * 360,
         }
@@ -172,8 +172,12 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   private drawShape(shape: Shape): void {
-    if (shape.type === ShapeType.circle) {
-      this.drawCircle(shape as Circle);
+    switch (shape.type) {
+      case ShapeType.circle:
+        this.drawCircle(shape as Circle);
+        break;
+      default:
+        throw new Error(`Unknown shape type: ${shape.type}`);
     }
   }
 
@@ -208,8 +212,8 @@ export class CanvasComponent implements AfterViewInit {
   private isValidPosition(position: Position): boolean {
     return position.x >= 0
       && position.y >= 0
-      && position.x <= this.canvasProperty.width
-      && position.y <= this.canvasProperty.height;
+      && position.x <= WORLD_PROPERTY.width
+      && position.y <= WORLD_PROPERTY.height;
   }
 
   switchGravity(): void {
@@ -228,10 +232,6 @@ export class CanvasComponent implements AfterViewInit {
     this.isCollisionEnabled = !this.isCollisionEnabled;
   }
 
-  setAirResistanceValue(value: number): void {
-    this.airResistanceService.setAirResistance(value);
-  }
-
   focusOnShape(event: MouseEvent): void {
     this.focusedShape = this.objectStorageService.getElementByPosition(
       this.mouseEventToPosition(event),
@@ -243,5 +243,9 @@ export class CanvasComponent implements AfterViewInit {
       x: toMeter(event.clientX - this.boundingCanvasRect.left),
       y: toMeter(event.clientY - this.boundingCanvasRect.top),
     };
+  }
+
+  getNumberOfShapes(): number {
+    return this.objectStorageService.getAll().length;
   }
 }
