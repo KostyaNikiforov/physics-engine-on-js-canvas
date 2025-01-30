@@ -37,10 +37,10 @@ export class ShapeCreationService {
         this.mouseEventToPosition(eventData.position),
         {
           radius: 0.2,
-          speed: 15,
+          speed: 4,
           direction: {
-            x: 1, // Math.random() * 2 - 1,
-            y: 0, //Math.random() * 2 - 1,
+            x: 5,
+            y: 0,
           },
         }
       )

@@ -76,7 +76,6 @@ export class CameraService {
               = this.toNewCameraPosition(event as MouseDrugEventData)
 
             this.updateCameraPosition(newCameraPosition)
-
             return newCameraPosition;
           default:
             return null;
@@ -93,26 +92,7 @@ export class CameraService {
   }
 
   private updateCameraPosition(position: Position): void {
-    if (this.cameraBorder.leftBorder <= position.x) {
-      const rightCameraBorderPositionX: number
-        = this.cameraBorder.rightBorder - this.__camera.width;
-
-      this.__camera.position.x = position.x <= rightCameraBorderPositionX
-        ? position.x
-        : rightCameraBorderPositionX;
-    } else {
-      this.__camera.position.x = this.cameraBorder.leftBorder;
-    }
-
-    if (this.cameraBorder.topBorder <= position.y) {
-      const bottomCameraBorderPositionY: number
-        = this.cameraBorder.bottomBorder - this.__camera.height;
-
-      this.__camera.position.y = position.y <= bottomCameraBorderPositionY
-        ? position.y
-        : bottomCameraBorderPositionY;
-    } else {
-      this.__camera.position.y = this.cameraBorder.topBorder;
-    }
+    this.__camera.position.x = position.x;
+    this.__camera.position.y = position.y;
   }
 }

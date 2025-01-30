@@ -32,6 +32,7 @@ export class Shape {
   move(): void {
     this.position.x += this.velocity.x * LifeCircleService.timeStepPerFrame;
     this.position.y += this.velocity.y * LifeCircleService.timeStepPerFrame;
+    console.log(this.position.y);
   }
 }
 
