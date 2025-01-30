@@ -1,14 +1,14 @@
 import {Position} from "./model/position";
-import {Vector} from "./model/vector";
+import {Vector2} from "./model/vector2";
 
-export function toVector(positionStart: Position, positionFinish): Vector {
+export function toVector(positionStart: Position, positionFinish): Vector2 {
   return {
     x: positionFinish.x - positionStart.x,
     y: positionFinish.y - positionStart.y,
   };
 }
 
-export function normalizeVector(vector: Vector): Vector {
+export function normalizeVector(vector: Vector2): Vector2 {
   const length: number = Math.hypot(vector.x, vector.y);
 
   return {
@@ -17,6 +17,6 @@ export function normalizeVector(vector: Vector): Vector {
   };
 }
 
-export function getVectorMagnitude(vector: Vector): number {
+export function getVectorMagnitude(vector: Vector2): number {
   return Math.hypot(vector.x, vector.y);
 }

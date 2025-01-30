@@ -6,37 +6,24 @@ import {MATERIALS, MaterialType} from "./material";
 import {LifeCircleService} from "../service/world/life-circle.service";
 import {FULL_CIRCLE} from "../service/rendar/drawing.service";
 
-export class Circle extends Shape {
-  radius: number;
-  square: number;
-  circuit: number;
+export class Polygon extends Shape {
+  points: Vector2[];
 
   constructor(
     position: Position,
-    radius: number,
+    polygons: Vector2[],
     speed: number,
     direction: Vector2,
     materialType: MaterialType = MaterialType.METAL
   ) {
     super(
       position,
-      ShapeType.circle,
+      ShapeType.polygon,
       speed,
       direction,
-      MathUtil.getCircleSquare(radius) * MATERIALS[materialType].density
+      5,
     );
 
-    this.radius = radius;
-    this.square = MathUtil.getCircleSquare(radius);
-    this.circuit = MathUtil.getCircleCircuit(radius);
-  }
-
-  setRotationSpeed(speed: number): void {
-    this.rotationSpeedAngle
-      = FULL_CIRCLE * (speed / this.circuit)  * LifeCircleService.timeStepPerFrame
-  }
-
-  rotate(): void {
-    this.rotation += this.rotationSpeedAngle;
+    this.points = polygons;
   }
 }

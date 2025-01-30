@@ -1,0 +1,58 @@
+<div class="tool-bar">
+  <div class="tool-bar__item">
+    Gravity
+    <nz-switch
+      [ngModel]="toolBarService.gravityEnabled"
+      (ngModelChange)="toolBarService.switchGravity($event)"
+    ></nz-switch>
+  </div>
+
+  <div class="tool-bar__item">
+    Land Gravity
+    <nz-switch
+      [ngModel]="toolBarService.landGravityEnabled"
+      (ngModelChange)="toolBarService.switchLandGravity($event)"
+    ></nz-switch>
+  </div>
+
+  <div class="tool-bar__item">
+    Air Resistance
+    <nz-switch
+      [ngModel]="toolBarService.airResistanceEnabled"
+      (ngModelChange)="toolBarService.switchAirResistance($event)"
+    ></nz-switch>
+  </div>
+
+  <div class="tool-bar__item">
+    Collision
+    <nz-switch
+      [ngModel]="toolBarService.collisionEnabled"
+      (ngModelChange)="toolBarService.switchCollision($event)"
+    ></nz-switch>
+  </div>
+
+  <div class="tool-bar__item">
+    Border Collision
+    <nz-switch
+      [ngModel]="toolBarService.borderCollisionEnabled"
+      (ngModelChange)="toolBarService.switchBorderCollision($event)"
+    ></nz-switch>
+  </div>
+
+  <div class="tool-bar__item">
+    Pause
+    <nz-switch
+      [ngModel]="toolBarService.paused"
+      (ngModelChange)="toolBarService.switchPause($event)"
+    ></nz-switch>
+  </div>
+
+  <button nz-button class="button" (click)="removeAll()">Clear</button>
+</div>
+
+<canvas
+  #canvas
+  class="canvas"
+  [height]="cameraProperty.height"
+  [width]="cameraProperty.width"
+></canvas>
