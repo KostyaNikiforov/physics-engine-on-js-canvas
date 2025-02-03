@@ -1,23 +1,22 @@
-import {Injectable} from "@angular/core";
-import {WORLD_PROPERTY} from "../../canvas-page/canvas.component";
+import {inject, Injectable, OnInit} from "@angular/core";
+import {WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import {CameraService} from "./camera.service";
 import {DrawingService} from "./drawing.service";
 import {ObjectStorageService} from "../world/object-storage.service";
 import {Shape, ShapeType} from "../../model/shape";
 import {Circle} from "../../model/circle";
-import {getBackground} from "../../drawable/world-background";
+import {getBackgroundPicture} from "../../common/drawable/world-background";
 import {Polygon} from "../../model/polygon";
 import {Vector2} from "../../common/util/model/vector2";
+import {AppCamera} from "./app-camera.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ObjectRenderingService {
-  private readonly background: HTMLCanvasElement = getBackground(
-    this.toPx(WORLD_PROPERTY.width),
-    this.toPx(WORLD_PROPERTY.height),
-    this.toPx(0.5)
-  );
+  private camera: AppCamera = inject(AppCamera);
+
+  private backgroundPicture!: HTMLCanvasElement;
 
   constructor(
     private cameraService: CameraService,
@@ -26,12 +25,20 @@ export class ObjectRenderingService {
   ) {
   }
 
+  init(): void {
+    this.backgroundPicture = getBackgroundPicture(
+      this.toPx(WORLD_PROPERTY.width),
+      this.toPx(WORLD_PROPERTY.height),
+      this.toPx(0.5)
+    );
+  }
+
   render(): void {
     this.drawingService.clear();
 
     this.drawingService.draw(
       { x: this.toX(0), y: this.toY(0) },
-      this.background
+      this.backgroundPicture
     );
 
     this.objectStorageService.getAll()
@@ -78,18 +85,18 @@ export class ObjectRenderingService {
   }
 
   private toX(value: number): number {
-    return this.cameraService.toPx(
+    return this.camera.meterToPx(
       value - this.cameraService.camera.position.x
     );
   }
 
   private toY(value: number): number {
-    return this.cameraService.toPx(
+    return this.camera.meterToPx(
       value - this.cameraService.camera.position.y
     );
   }
 
   private toPx(value: number): number {
-    return this.cameraService.toPx(value);
+    return this.camera.meterToPx(value);
   }
 }

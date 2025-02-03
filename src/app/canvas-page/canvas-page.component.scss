@@ -1,0 +1,17 @@
+.app-canvas-page {
+  height: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4px;
+
+  padding: 8px;
+}
+
+.canvas {
+  flex: 3;
+  flex-shrink: 0;
+
+  border: 2px solid grey;
+}

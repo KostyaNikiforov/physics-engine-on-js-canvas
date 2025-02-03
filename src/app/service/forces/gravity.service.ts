@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {ObjectStorageService} from "../world/object-storage.service";
 import {Circle} from "../../model/circle";
-import { WORLD_PROPERTY} from "../../canvas-page/canvas.component";
+import { WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import {getDistanceBetweenPoints} from "../../common/position.util";
 import { LifeCircleService} from "../world/life-circle.service";
 import {PhysicUtil} from "../../common/physic.util";

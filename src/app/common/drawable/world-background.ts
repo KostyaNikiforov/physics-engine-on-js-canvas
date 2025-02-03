@@ -1,4 +1,4 @@
-export function getBackground(
+export function getBackgroundPicture(
   width: number,
   height: number,
   cellSize: number,

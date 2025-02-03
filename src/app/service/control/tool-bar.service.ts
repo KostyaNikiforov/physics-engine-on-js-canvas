@@ -5,18 +5,31 @@ import {Injectable} from "@angular/core";
 })
 export class ToolBarService {
   private isLandGravityEnabled: boolean = true;
-
   private isAirResistanceEnabled: boolean = true;
-
   private isGravityEnabled: boolean = false;
-
   private isCollisionEnabled: boolean = false;
-
   private isBorderCollisionEnabled: boolean = true;
-
   private isRotationEnabled: boolean = true;
-
   private isPaused: boolean = false;
+
+  private circleRadius: number = 10;
+  private _speed: number = 5;
+
+  get speed(): number {
+    return this._speed;
+  }
+
+  setSpeed(value: number) {
+    this._speed = value;
+  }
+
+  get radius(): number {
+    return this.circleRadius;
+  }
+
+  set radius(value: number) {
+    this.circleRadius = value;
+  }
 
   get landGravityEnabled(): boolean {
     return this.isLandGravityEnabled;
@@ -71,6 +84,6 @@ export class ToolBarService {
   }
 
   switchGravity(value: boolean = !this.isGravityEnabled): void {
-    this.isGravityEnabled =  value;
+    this.isGravityEnabled = value;
   }
 }

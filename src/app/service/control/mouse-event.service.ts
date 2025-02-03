@@ -43,8 +43,7 @@ export class MouseEventService {
       filter(this.filterCanvasMouseEvent.bind(this)),
     ) as Observable<MouseEvent>;
 
-  readonly mouseEvent$: Observable<MouseEventData>
-    = this.getMouseEvent();
+  readonly mouseEvent$: Observable<MouseEventData> = this.getMouseEvent();
 
   readonly mouseClickEvent$: Observable<MouseClickEventData>
     = this.mouseEvent$.pipe(

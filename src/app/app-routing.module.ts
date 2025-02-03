@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {CanvasComponent} from "./canvas-page/canvas.component";
+import {CanvasPageComponent} from "./canvas-page/canvas-page.component";
 
 const routes: Routes = [
   {
-    path: 'canvas',
-    component: CanvasComponent,
-  }
+    path: '',
+    component: CanvasPageComponent,
+  },
 ];
 
 @NgModule({
