@@ -90,7 +90,7 @@ export class CameraService {
   centralizeCamera(): void {
     this.camera.moveTo(
       WORLD_PROPERTY.width / 2 - this.camera.pxToMeter(this.camera.widthPx) / 2,
-      WORLD_PROPERTY.height / 2 - this.camera.pxToMeter(this.camera.heightPx) / 2,
+      WORLD_PROPERTY.height - (this.camera.pxToMeter(this.camera.heightPx) - 3),
     )
   }
 

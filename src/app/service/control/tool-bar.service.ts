@@ -7,7 +7,7 @@ export class ToolBarService {
   private isLandGravityEnabled: boolean = true;
   private isAirResistanceEnabled: boolean = true;
   private isGravityEnabled: boolean = false;
-  private isCollisionEnabled: boolean = false;
+  private isCollisionEnabled: boolean = true;
   private isBorderCollisionEnabled: boolean = true;
   private isRotationEnabled: boolean = true;
   private isPaused: boolean = false;

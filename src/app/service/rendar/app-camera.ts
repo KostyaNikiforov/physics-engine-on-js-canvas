@@ -4,7 +4,7 @@ import {Vector2} from "../../common/util/model/vector2";
 
 export const Z_STEP_SIZE = 0.5;
 export const Z_RANGE = { min: 5, max: 100 };
-export const INITIAL_Z = 50;
+export const INITIAL_Z = 20;
 const INITIAL_CAMERA = { x: 0, y: 0, z: INITIAL_Z };
 
 @Injectable({
