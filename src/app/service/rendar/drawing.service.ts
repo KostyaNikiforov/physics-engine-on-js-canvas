@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {Vector2} from "../../common/util/model/vector2";
-import {AppCamera} from "./app-camera.service";
-import {AppCanvas} from "./app-canvas.service";
+import {AppCamera} from "./app-camera";
+import {AppCanvas} from "./app-canvas";
 
 export const FULL_CIRCLE = 2 * Math.PI;
 
@@ -46,7 +46,7 @@ export class DrawingService {
     this.canvas.context.closePath();
   }
 
-  draw(position: Vector2, background: HTMLCanvasElement): void {
-    this.canvas.context.drawImage(background, position.x, position.y);
+  drawPicture(position: Vector2, background: HTMLCanvasElement, width?: number, height?: number): void {
+    this.canvas.context.drawImage(background, position.x, position.y, width, height);
   }
 }

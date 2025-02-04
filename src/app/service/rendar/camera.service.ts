@@ -1,5 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {filter, map, Observable, tap} from "rxjs";
+import {filter, map, Observable, takeUntil, tap} from "rxjs";
 import {Position} from "../../common/util/model/position";
 import {
   MouseDrugEventData,
@@ -8,7 +8,10 @@ import {
   MouseEventData
 } from "../control/mouse-event.service";
 import {WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
-import {AppCamera} from "./app-camera.service";
+import {AppCamera} from "./app-camera";
+import {KeyboardEventService} from "../control/keyboard-event.service";
+import {AppMouse} from "./app-mouse";
+import {Vector2} from "../../common/util/model/vector2";
 
 export const CAMERA_POSITION_GAP_Y = 2;
 export const CAMERA_POSITION_GAP_X = 4;
@@ -18,6 +21,7 @@ export const CAMERA_POSITION_GAP_X = 4;
 })
 export class CameraService {
   private readonly _camera: AppCamera = inject(AppCamera);
+  private readonly mouse: AppMouse = inject(AppMouse);
 
   private cameraBorder: any = {
     leftBorder: -CAMERA_POSITION_GAP_X,
@@ -30,6 +34,7 @@ export class CameraService {
 
   constructor(
     private mouseEventService: MouseEventService,
+    private keyboardEventService: KeyboardEventService,
   ) {
   }
 
@@ -37,28 +42,57 @@ export class CameraService {
     return this._camera;
   }
 
-  readonly changes$: Observable<any>
-    = this.mouseEventService.mouseEvent$.pipe(
-      map((event: MouseEventData): Position => {
-        switch (event.type) {
-          case MouseEventType.DOWN:
-            this.startCameraPosition = {
-              x: this._camera.position.x,
-              y: this._camera.position.y,
-            }
-            return null;
-          case MouseEventType.DRUG:
-            const newCameraPosition: Position
-              = this.toNewCameraPosition(event as MouseDrugEventData)
+  readonly changes$: Observable<Position | null> = this.mouseEventService.mouseEvent$.pipe(
+    map((event: MouseEventData): Position => {
+      switch (event.type) {
+        case MouseEventType.DOWN:
+          this.startCameraPosition = {
+            x: this._camera.position.x,
+            y: this._camera.position.y,
+          }
+          return null;
+        case MouseEventType.DRUG:
+          const newCameraPosition: Position
+            = this.toNewCameraPosition(event as MouseDrugEventData)
 
-            this.updateCameraPosition(newCameraPosition)
-            return newCameraPosition;
-          default:
-            return null;
+          this.updateCameraPosition(newCameraPosition)
+          return newCameraPosition;
+        case MouseEventType.WHEEL:
+          if (event.direction.y < 0) {
+            this.camera.moveForward(this.mouse.position);
+          } else if (event.direction.y > 0) {
+            this.camera.moveBackward(this.mouse.position);
+          }
+
+          return null;
+        default:
+          return null;
+      }
+    }),
+  );
+
+  subscribeKeyboardEvent(destroy: Observable<boolean>): void {
+    this.keyboardEventService.keyDownEvent$.pipe(
+      takeUntil(destroy),
+      tap((event: any): void => {
+        switch (event.event.key) {
+          case 'ArrowUp':
+            this.camera.moveForward(this.mouse.position);
+            break;
+          case 'ArrowDown':
+            this.camera.moveBackward(this.mouse.position);
+            break;
         }
       }),
-      filter((position: Position): boolean => !!position),
-    );
+    ).subscribe();
+  }
+
+  centralizeCamera(): void {
+    this.camera.moveTo(
+      WORLD_PROPERTY.width / 2 - this.camera.pxToMeter(this.camera.widthPx) / 2,
+      WORLD_PROPERTY.height / 2 - this.camera.pxToMeter(this.camera.heightPx) / 2,
+    )
+  }
 
   private toNewCameraPosition(mouseDrugEventData: MouseDrugEventData): Position {
     return {

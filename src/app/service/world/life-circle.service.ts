@@ -13,10 +13,8 @@ import {ShapeType} from "../../model/shape";
   providedIn: 'root'
 })
 export class LifeCircleService {
-  static readonly fps = 120;
-
-  static readonly frameTime = 1000 / LifeCircleService.fps
-
+  static readonly fps: number = 60;
+  static readonly frameTime: number = 1000 / LifeCircleService.fps
   static readonly timeStepPerFrame: number = 1 / LifeCircleService.fps;
 
   constructor(

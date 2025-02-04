@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef, inject,
+  ElementRef, inject, OnDestroy,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -12,15 +12,15 @@ import {LifeCircleService} from "../service/world/life-circle.service";
 import {NzSwitchComponent} from "ng-zorro-antd/switch";
 import {FormsModule} from "@angular/forms";
 import {NzButtonComponent} from "ng-zorro-antd/button";
-import {AppCamera} from "../service/rendar/app-camera.service";
-import {ObjectRenderingService} from "../service/rendar/object-rendering.service";
+import {AppCamera} from "../service/rendar/app-camera";
 import {NgIf} from "@angular/common";
-import {AppCanvas} from "../service/rendar/app-canvas.service";
+import {AppCanvas} from "../service/rendar/app-canvas";
 import {ToolBarComponent} from "./tool-bar/tool-bar.component";
+import {Subject, takeUntil} from "rxjs";
 
 export const WORLD_PROPERTY = {
-  width: 40,
-  height: 20,
+  width: 100,
+  height: 50,
 }
 
 @Component({
@@ -41,7 +41,9 @@ export const WORLD_PROPERTY = {
     class: "app-canvas-page"
   },
 })
-export class CanvasPageComponent implements AfterViewInit {
+export class CanvasPageComponent implements AfterViewInit, OnDestroy {
+  private readonly destroySubject: Subject<boolean> = new Subject<boolean>();
+
   private readonly camera: AppCamera = inject(AppCamera);
   private readonly canvas: AppCanvas = inject(AppCanvas);
 
@@ -51,16 +53,16 @@ export class CanvasPageComponent implements AfterViewInit {
     private cameraService: CameraService,
     private lifeCircleService: LifeCircleService,
     private shapeCreationService: ShapeCreationService,
-    private objectRenderingService: ObjectRenderingService,
   ) {
   }
 
   ngAfterViewInit(): void {
     this.canvas.init(this.canvasElement.nativeElement);
     this.camera.bindCanvas(this.canvasElement.nativeElement);
-    this.cameraService.changes$.subscribe();
+    this.cameraService.changes$.pipe(takeUntil(this.destroySubject)).subscribe();
+    this.cameraService.subscribeKeyboardEvent(this.destroySubject);
+    this.cameraService.centralizeCamera();
     this.shapeCreationService.handleCreationActionOnCanvas(this.canvasElement.nativeElement).subscribe();
-    this.objectRenderingService.init();
 
     /*this.objectStorageService.add(this.shapeFactoryService.create(
       ShapeType.polygon,
@@ -87,5 +89,10 @@ export class CanvasPageComponent implements AfterViewInit {
     ));*/
 
     this.lifeCircleService.run();
+  }
+
+  ngOnDestroy(): void {
+    this.destroySubject.next(true);
+    this.destroySubject.complete();
   }
 }

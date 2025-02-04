@@ -1,7 +1,8 @@
-export function getBackgroundPicture(
+export function getFilledBackgroundPicture(
   width: number,
   height: number,
   cellSize: number,
+  scale: number,
 ): HTMLCanvasElement {
   const backgroundCanvas: HTMLCanvasElement = document.createElement("canvas");
   const canvasContext: CanvasRenderingContext2D = backgroundCanvas.getContext("2d");
@@ -12,7 +13,7 @@ export function getBackgroundPicture(
   drawBackgroundColor(canvasContext, width, height);
   drawBorder(canvasContext, width, height)
   drawDotInTheCenter(canvasContext, width, height);
-  drawCell(canvasContext, width, height, cellSize);
+  drawCell(canvasContext, width, height, getCellSize(cellSize, scale));
 
   return backgroundCanvas;
 }
@@ -64,6 +65,8 @@ function drawCell(
   cellSize: number,
 ): void {
   canvasContext.strokeStyle = 'rgba(0, 0, 0, 0.05)';
+  canvasContext.lineWidth = 2;
+
   for (let i: number = 0; i <= width; i+= cellSize) {
     canvasContext.beginPath();
     canvasContext.moveTo(i, 0);
@@ -76,5 +79,21 @@ function drawCell(
     canvasContext.moveTo(0, i);
     canvasContext.lineTo(width, i);
     canvasContext.stroke();
+  }
+}
+
+function getCellSize(cellSize: number, scale: number): number {
+  if (scale > 140) {
+    return cellSize / 10;
+  } else if (scale > 70) {
+    return cellSize / 5;
+  } else if (scale > 35) {
+    return cellSize / 2;
+  } else if (scale > 10) {
+    return cellSize;
+  } else if (scale > 7) {
+    return cellSize * 2;
+  } else {
+    return cellSize * 5;
   }
 }

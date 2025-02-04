@@ -5,18 +5,16 @@ import {DrawingService} from "./drawing.service";
 import {ObjectStorageService} from "../world/object-storage.service";
 import {Shape, ShapeType} from "../../model/shape";
 import {Circle} from "../../model/circle";
-import {getBackgroundPicture} from "../../common/drawable/world-background";
+import {getFilledBackgroundPicture} from "../../common/drawable/world-background";
 import {Polygon} from "../../model/polygon";
 import {Vector2} from "../../common/util/model/vector2";
-import {AppCamera} from "./app-camera.service";
+import {AppCamera, Z_STEP_SIZE} from "./app-camera";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ObjectRenderingService {
   private camera: AppCamera = inject(AppCamera);
 
-  private backgroundPicture!: HTMLCanvasElement;
+  private filledBackgroundPicture!: HTMLCanvasElement;
 
   constructor(
     private cameraService: CameraService,
@@ -25,20 +23,14 @@ export class ObjectRenderingService {
   ) {
   }
 
-  init(): void {
-    this.backgroundPicture = getBackgroundPicture(
-      this.toPx(WORLD_PROPERTY.width),
-      this.toPx(WORLD_PROPERTY.height),
-      this.toPx(0.5)
-    );
-  }
-
   render(): void {
     this.drawingService.clear();
 
-    this.drawingService.draw(
+    this.drawingService.drawPicture(
       { x: this.toX(0), y: this.toY(0) },
-      this.backgroundPicture
+      this.getBackgroundPicture(),
+      this.toPx(WORLD_PROPERTY.width),
+      this.toPx(WORLD_PROPERTY.height),
     );
 
     this.objectStorageService.getAll()
@@ -94,6 +86,19 @@ export class ObjectRenderingService {
     return this.camera.meterToPx(
       value - this.cameraService.camera.position.y
     );
+  }
+
+  private getBackgroundPicture(): HTMLCanvasElement {
+    if (this.camera.isZChanged() || !this.filledBackgroundPicture) {
+      this.filledBackgroundPicture = getFilledBackgroundPicture(
+        this.toPx(WORLD_PROPERTY.width),
+        this.toPx(WORLD_PROPERTY.height),
+        this.toPx(1),
+        this.camera.scale,
+      );
+    }
+
+    return this.filledBackgroundPicture;
   }
 
   private toPx(value: number): number {

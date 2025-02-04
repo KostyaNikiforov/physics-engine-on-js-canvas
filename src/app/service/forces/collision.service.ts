@@ -9,9 +9,7 @@ import {Shape, ShapeType} from "../../model/shape";
 import {getDistanceBetweenPoints} from "../../common/position.util";
 import {Polygon} from "../../model/polygon";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CollisionService {
   private lowestVelocity: number = 0.7;
 
@@ -125,8 +123,6 @@ export class CollisionService {
         const shape2: Shape = shapes[j];
 
         const hasCollision = this.circleComplexCollision(shape1, shape2);
-
-        console.log(hasCollision)
 
         if (hasCollision) {
           shape1.velocity.x = 0;
