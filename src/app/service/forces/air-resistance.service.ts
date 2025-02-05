@@ -5,8 +5,10 @@ import {PhysicUtil} from "../../common/physic.util";
 import {getVectorMagnitude} from "../../common/util/vector.util";
 import {Shape, ShapeType} from "../../model/shape";
 import {Circle} from "../../model/circle";
+import {MathUtil} from "../../common/math.util";
+import {Vector2} from "../../common/util/model/vector2";
 
-const AIR_DENSITY = 1.225; // кг/м^3
+const AIR_DENSITY = 997; // кг/м^3
 const RESISTANCE_COEFFICIENT = 0.47; // для шара
 
 @Injectable({
@@ -38,9 +40,11 @@ export class AirResistanceService {
           getVectorMagnitude(circle.velocity),
         );
         const A: number = resistanceForce / circle.mass;
+        const direction: Vector2 = circle.direction();
 
-        circle.velocity.x += A * -circle.velocity.x * LifeCircleService.timeStepPerFrame;
-        circle.velocity.y += A * -circle.velocity.y * LifeCircleService.timeStepPerFrame;
+        // console.log( A * -direction.x * LifeCircleService.timeStepPerFrame)
+        circle.velocity.x += A * -direction.x * LifeCircleService.timeStepPerFrame;
+        circle.velocity.y += A * -direction.y * LifeCircleService.timeStepPerFrame;
       }
     );
   }

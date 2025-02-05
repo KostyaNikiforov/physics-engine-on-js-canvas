@@ -72,7 +72,8 @@ export class ObjectRenderingService {
         y: this.toY(circle.position.y),
       },
       this.toPx(circle.radius),
-      circle.rotation
+      circle.rotation,
+      circle.color,
     );
   }
 

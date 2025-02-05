@@ -8,16 +8,14 @@ import {ShapeFactoryService} from "./shape-factory.service";
 import {AppCamera} from "./rendar/app-camera";
 import {ToolBarService} from "./control/tool-bar.service";
 import {AppMouse} from "./rendar/app-mouse";
+import {MathUtil} from "../common/math.util";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShapeCreationService {
   private camera: AppCamera = inject(AppCamera);
-  private mouse: AppMouse = inject(AppMouse);
   private toolBarService: ToolBarService = inject(ToolBarService);
-
-  private boundingCanvasRect: DOMRect;
 
   constructor(
     private mouseEventService: MouseEventService,
@@ -26,9 +24,7 @@ export class ShapeCreationService {
   ) {
   }
 
-  handleCreationActionOnCanvas(canvas: HTMLCanvasElement): Observable<MouseEventData> {
-    this.boundingCanvasRect = canvas.getBoundingClientRect();
-
+  handleCreationActionOnCanvas(): Observable<MouseEventData> {
     return this.mouseEventService.mouseClickEvent$.pipe(
       tap(this.handleClick.bind(this))
     );
@@ -41,11 +37,8 @@ export class ShapeCreationService {
         this.mouseEventToPosition(eventData.position),
         {
           radius: this.toolBarService.radius / 10,
-          speed: 0,
-          direction: {
-            x: 0,
-            y: 0,
-          },
+          speed: this.toolBarService.speed,
+          direction: MathUtil.getVectorFromAngle(this.toolBarService.direction),
         }
       )
     );

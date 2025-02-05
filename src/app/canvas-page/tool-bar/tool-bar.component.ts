@@ -12,7 +12,9 @@ import {FormsModule} from "@angular/forms";
 import {ToolBarService} from "../../service/control/tool-bar.service";
 import {NzButtonComponent} from "ng-zorro-antd/button";
 import {NzInputDirective} from "ng-zorro-antd/input";
-import { NzSliderModule} from "ng-zorro-antd/slider";
+import {NzMarks, NzSliderModule} from "ng-zorro-antd/slider";
+import {Observable} from "rxjs";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   standalone: true,
@@ -28,9 +30,35 @@ import { NzSliderModule} from "ng-zorro-antd/slider";
     NzButtonComponent,
     NzInputDirective,
     NzSliderModule,
+    AsyncPipe,
   ]
 })
 export class ToolBarComponent {
+  readonly directionMarks: NzMarks = {
+    0: '0',
+    90: '90',
+    180: '180',
+    270: '270',
+    360: '360',
+  };
+  readonly radiusMarks: NzMarks = {
+    1: '0.1',
+    50: '5',
+    100: '10',
+    200: '20',
+  }
+  readonly speedMarks: NzMarks = {
+    1: '1',
+    5: '5',
+    10: '10',
+    20: '20',
+    50: '50',
+    75: '75',
+    100: '100',
+  }
+
+  readonly objectsNumber$: Observable<number> = this.objectStorageService.objectsNumber$;
+
   constructor(
     public toolBarService: ToolBarService,
     private objectStorageService: ObjectStorageService,
@@ -39,6 +67,10 @@ export class ToolBarComponent {
 
   removeAll(): void {
     this.objectStorageService.removeAll();
+  }
+
+  removeLast(): void {
+    this.objectStorageService.removeLast();
   }
 
   changeRadius($event: number): void {

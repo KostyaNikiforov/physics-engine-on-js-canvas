@@ -102,8 +102,6 @@ export class AppCamera {
   }
 
   moveForward(mousePosition: Vector2): void {
-    console.log('moveForward', this.z);
-
     if (this.z <= Z_RANGE.min) {
       return;
     }

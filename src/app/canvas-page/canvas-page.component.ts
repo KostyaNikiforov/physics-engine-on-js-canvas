@@ -17,10 +17,13 @@ import {NgIf} from "@angular/common";
 import {AppCanvas} from "../service/rendar/app-canvas";
 import {ToolBarComponent} from "./tool-bar/tool-bar.component";
 import {Subject, takeUntil} from "rxjs";
+import {ShapeType} from "../model/shape";
+import {ObjectStorageService} from "../service/world/object-storage.service";
+import {ShapeFactoryService} from "../service/shape-factory.service";
 
 export const WORLD_PROPERTY = {
-  width: 100,
-  height: 50,
+  width: 200,
+  height: 100,
 }
 
 @Component({
@@ -53,6 +56,8 @@ export class CanvasPageComponent implements AfterViewInit, OnDestroy {
     private cameraService: CameraService,
     private lifeCircleService: LifeCircleService,
     private shapeCreationService: ShapeCreationService,
+    private objectStorageService: ObjectStorageService,
+    private shapeFactoryService: ShapeFactoryService,
   ) {
   }
 
@@ -61,8 +66,72 @@ export class CanvasPageComponent implements AfterViewInit, OnDestroy {
     this.camera.bindCanvas(this.canvasElement.nativeElement);
     this.cameraService.changes$.pipe(takeUntil(this.destroySubject)).subscribe();
     this.cameraService.subscribeKeyboardEvent(this.destroySubject);
-    this.cameraService.centralizeCamera();
-    this.shapeCreationService.handleCreationActionOnCanvas(this.canvasElement.nativeElement).subscribe();
+    this.cameraService.moveCameraToBottomCenter();
+    this.shapeCreationService.handleCreationActionOnCanvas().subscribe();
+
+    for (let i = 0; i < 1500; i++) {
+      this.objectStorageService.add(
+        this.shapeFactoryService.create(
+          ShapeType.circle,
+          {
+            x: Math.random() * WORLD_PROPERTY.width,
+            y: Math.random() * WORLD_PROPERTY.height,
+          },
+          {
+            radius: 0.1,
+            speed: 3,
+            direction: {
+              x: 0,
+              y: 0,
+            },
+          }
+        )
+      );
+    }
+
+    this.lifeCircleService.run();
+
+    // Random position from
+    /*setInterval(() => {
+      this.objectStorageService.add(
+        this.shapeFactoryService.create(
+          ShapeType.circle,
+          {
+            x: WORLD_PROPERTY.width / 2,
+            y: WORLD_PROPERTY.height / 2,
+          },
+          {
+            radius: Math.random() * 3 + 0.2,
+            speed: Math.random() * 100 + 1,
+            direction: {
+              x: 1,
+              y: 0,
+            },
+          }
+        )
+      );
+    }, 100);*/
+
+
+    /*setInterval(() => {
+      this.objectStorageService.add(
+        this.shapeFactoryService.create(
+          ShapeType.circle,
+          {
+            x: 0.3,
+            y: 0.3,
+          },
+          {
+            radius: 0.2,
+            speed: 5,
+            direction: {
+              x: 1,
+              y: 0,
+            },
+          }
+        )
+      );
+    }, 100);*/
 
     /*this.objectStorageService.add(this.shapeFactoryService.create(
       ShapeType.polygon,
@@ -87,8 +156,6 @@ export class CanvasPageComponent implements AfterViewInit, OnDestroy {
         ]
       }
     ));*/
-
-    this.lifeCircleService.run();
   }
 
   ngOnDestroy(): void {

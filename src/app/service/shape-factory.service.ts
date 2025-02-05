@@ -17,8 +17,6 @@ export class ShapeFactoryService {
     position: Position,
     properties: ShapeProperties
   ): Shape {
-    console.log('New shape', type, properties);
-
     switch (type) {
       case ShapeType.circle:
         return this.createCircle(position, properties);

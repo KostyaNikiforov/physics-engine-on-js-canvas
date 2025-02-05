@@ -11,7 +11,7 @@ import {Polygon} from "../../model/polygon";
 
 @Injectable({ providedIn: 'root' })
 export class CollisionService {
-  private lowestVelocity: number = 0.7;
+  private lowestVelocity: number = 1;
 
   constructor(
     private objectStorageService: ObjectStorageService,

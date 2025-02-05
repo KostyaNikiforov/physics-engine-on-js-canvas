@@ -47,9 +47,13 @@
 </div>
 
 <button nz-button class="button" (click)="removeAll()">Clear</button>
+<button nz-button class="button" (click)="removeLast()">Remove last</button>
 
 Radius
 <nz-slider
+  nzMin="1"
+  nzMax="200"
+  [nzMarks]="radiusMarks"
   nzTooltipVisible="never"
   [ngModel]="toolBarService.radius"
   (ngModelChange)="changeRadius($event)"
@@ -58,6 +62,21 @@ Radius
 Speed
 <nz-slider
   nzTooltipVisible="never"
+  nzMin="0"
+  nzMax="100"
+  [nzMarks]="speedMarks"
   [ngModel]="toolBarService.speed"
   (ngModelChange)="toolBarService.setSpeed($event)"
 />
+
+Direction
+<nz-slider
+  nzTooltipVisible="never"
+  nzMin="0"
+  nzMax="360"
+  [nzMarks]="directionMarks"
+  [ngModel]="toolBarService.direction"
+  (ngModelChange)="toolBarService.setDirection($event)"
+/>
+
+Object number - {{ objectsNumber$ | async }}

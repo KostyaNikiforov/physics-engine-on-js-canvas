@@ -1,6 +1,7 @@
 import {Position} from "../common/util/model/position";
 import {Vector2} from "../common/util/model/vector2";
 import {LifeCircleService} from "../service/world/life-circle.service";
+import {normalizeVector} from "../common/util/vector.util";
 
 export class Shape {
   position: Position;
@@ -27,6 +28,11 @@ export class Shape {
       x: speed * direction.x,
       y: speed * direction.y,
     };
+  }
+
+  // TODO: cache this value
+  direction(): Vector2 {
+    return normalizeVector(this.velocity);
   }
 
   move(): void {

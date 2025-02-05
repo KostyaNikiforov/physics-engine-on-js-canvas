@@ -4,16 +4,25 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 export class ToolBarService {
-  private isLandGravityEnabled: boolean = true;
-  private isAirResistanceEnabled: boolean = true;
+  private isLandGravityEnabled: boolean = false;
+  private isAirResistanceEnabled: boolean = false;
   private isGravityEnabled: boolean = false;
-  private isCollisionEnabled: boolean = true;
+  private isCollisionEnabled: boolean = false;
   private isBorderCollisionEnabled: boolean = true;
-  private isRotationEnabled: boolean = true;
+  private isRotationEnabled: boolean = false;
   private isPaused: boolean = false;
 
-  private circleRadius: number = 10;
+  private circleRadius: number = 1;
   private _speed: number = 5;
+  private _direction: number = 0;
+
+  get direction(): number {
+    return this._direction;
+  }
+
+  setDirection(value: number): void {
+    this._direction = value;
+  }
 
   get speed(): number {
     return this._speed;

@@ -27,7 +27,7 @@ export class DrawingService {
     this.canvas.context.closePath();
   }
 
-  drawCircle(position: Vector2, radius: number, rotation: number): void {
+  drawCircle(position: Vector2, radius: number, rotation: number, color?: string): void {
     this.canvas.context.beginPath();
     this.canvas.context.arc(
       position.x,
@@ -37,12 +37,13 @@ export class DrawingService {
       FULL_CIRCLE,
       true
     );
-    this.canvas.context.moveTo(position.x, position.y);
-    this.canvas.context.lineTo(
+    //this.canvas.context.moveTo(position.x, position.y);
+    /*this.canvas.context.lineTo(
       position.x + Math.cos(rotation) * radius,
       position.y + Math.sin(rotation) * radius,
-    );
-    this.canvas.context.stroke();
+    );*/
+    this.canvas.context.fillStyle = color || 'black';
+    this.canvas.context.fill();
     this.canvas.context.closePath();
   }
 
