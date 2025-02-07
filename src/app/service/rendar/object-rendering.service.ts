@@ -3,12 +3,12 @@ import {WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import {CameraService} from "./camera.service";
 import {DrawingService} from "./drawing.service";
 import {ObjectStorageService} from "../object-storage.service";
-import {Shape, ShapeType} from "../../model/shape";
-import {Circle} from "../../model/circle";
+import {Shape, ShapeType} from "../../model/entities/shape";
+import {Circle} from "../../model/entities/circle";
 import {getFilledBackgroundPicture} from "../../common/drawable/world-background";
 import {Vector2} from "../../common/util/model/vector2";
 import {AppCamera} from "./app-camera";
-import {Square} from "../../model/square";
+import {Square} from "../../model/entities/square";
 
 type AdditionalDrawingFunc = (drawingService: DrawingService, toX: (value: number) => number, toY: (value: number) => number) => void
 

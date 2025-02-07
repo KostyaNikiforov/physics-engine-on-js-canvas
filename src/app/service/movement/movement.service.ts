@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Shape} from "../../model/shape";
+import {Shape} from "../../model/entities/shape";
 
 @Injectable({ providedIn: 'root' })
 export class MovementService {

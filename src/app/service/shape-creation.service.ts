@@ -2,7 +2,7 @@ import {inject, Injectable} from "@angular/core";
 import {MouseClickEventData, MouseEventService} from "./control/mouse-event.service";
 import {Observable, takeUntil, tap} from "rxjs";
 import {ObjectStorageService} from "./object-storage.service";
-import {Shape, ShapeType} from "../model/shape";
+import {Shape, ShapeType} from "../model/entities/shape";
 import {ShapeFactoryService} from "./shape-factory.service";
 import {AppCamera} from "./rendar/app-camera";
 import {ToolBarService} from "../canvas-page/tool-bar/tool-bar.service";

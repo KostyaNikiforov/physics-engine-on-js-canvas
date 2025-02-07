@@ -1,8 +1,8 @@
 import {Shape, ShapeType} from "./shape";
-import {Vector2} from "../common/util/model/vector2";
-import { MaterialType} from "./material";
-import {LifeCircleService} from "../service/life-circle.service";
-import {PhysicUtil} from "../common/physic.util";
+import {Vector2} from "../../common/util/model/vector2";
+import { MaterialType} from "../material";
+import {LifeCircleService} from "../../service/life-circle.service";
+import {PhysicUtil} from "../../common/physic.util";
 
 export class Square extends Shape {
   size: number;

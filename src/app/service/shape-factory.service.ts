@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import {Shape, ShapeType} from "../model/shape";
+import {Shape, ShapeType} from "../model/entities/shape";
 import {ShapeProperties} from "../model/shape-properties";
-import {Circle} from "../model/circle";
-import {Square} from "../model/square";
+import {Circle} from "../model/entities/circle";
+import {Square} from "../model/entities/square";
 import {MaterialType} from "../model/material";
 import {Vector2} from "../common/util/model/vector2";
 

@@ -1,10 +1,10 @@
 import {inject, Injectable} from "@angular/core";
-import {Circle} from "../../model/circle";
+import {Circle} from "../../model/entities/circle";
 import { WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import {Vector2} from "../../common/util/model/vector2";
 import {getVectorMagnitude, normalizeVector, toVector} from "../../common/util/vector.util";
-import {Shape, ShapeType} from "../../model/shape";
-import {Square} from "../../model/square";
+import {Shape, ShapeType} from "../../model/entities/shape";
+import {Square} from "../../model/entities/square";
 import {ObjectRenderingService} from "../rendar/object-rendering.service";
 import {ToolBarService} from "../../canvas-page/tool-bar/tool-bar.service";
 import {MathUtil} from "../../common/math.util";

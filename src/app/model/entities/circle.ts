@@ -1,11 +1,11 @@
 import {Shape, ShapeType} from "./shape";
-import {Vector2} from "../common/util/model/vector2";
-import {MathUtil} from "../common/math.util";
-import {MaterialType} from "./material";
-import {LifeCircleService} from "../service/life-circle.service";
-import {FULL_CIRCLE} from "../service/rendar/drawing.service";
-import {COLORS} from "../common/colors";
-import {PhysicUtil} from "../common/physic.util";
+import {Vector2} from "../../common/util/model/vector2";
+import {MathUtil} from "../../common/math.util";
+import {MaterialType} from "../material";
+import {LifeCircleService} from "../../service/life-circle.service";
+import {FULL_CIRCLE} from "../../service/rendar/drawing.service";
+import {COLORS} from "../../common/colors";
+import {PhysicUtil} from "../../common/physic.util";
 
 export class Circle extends Shape {
   private _rotation: number;

@@ -1,6 +1,6 @@
-import {Vector2} from "../common/util/model/vector2";
-import {normalizeVector} from "../common/util/vector.util";
-import {MathUtil} from "../common/math.util";
+import {Vector2} from "../../common/util/model/vector2";
+import {normalizeVector} from "../../common/util/vector.util";
+import {MathUtil} from "../../common/math.util";
 
 export type Rotation = {
   speed: number;

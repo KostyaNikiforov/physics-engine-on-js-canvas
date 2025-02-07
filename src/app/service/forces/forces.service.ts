@@ -2,7 +2,7 @@ import {inject, Injectable} from "@angular/core";
 import {GravityService} from "./gravity.service";
 import {AirResistanceService} from "./air-resistance.service";
 import {ToolBarService} from "../../canvas-page/tool-bar/tool-bar.service";
-import {Shape} from "../../model/shape";
+import {Shape} from "../../model/entities/shape";
 
 @Injectable({ providedIn: 'root' })
 export class ForcesService {

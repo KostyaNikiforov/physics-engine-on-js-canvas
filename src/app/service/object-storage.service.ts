@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Shape} from "../model/shape";
+import {Shape} from "../model/entities/shape";
 import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({

@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
-import {Circle} from "../../model/circle";
+import {Circle} from "../../model/entities/circle";
 import { WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import { LifeCircleService} from "../life-circle.service";
 import {PhysicUtil} from "../../common/physic.util";
-import {Shape, ShapeType} from "../../model/shape";
-import {Square} from "../../model/square";
+import {Shape, ShapeType} from "../../model/entities/shape";
+import {Square} from "../../model/entities/square";
 import {MathUtil} from "../../common/math.util";
 
 const HALF_PI = Math.PI / 2;

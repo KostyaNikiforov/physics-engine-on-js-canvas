@@ -2,8 +2,8 @@ import {Injectable} from "@angular/core";
 import {LifeCircleService} from "../life-circle.service";
 import {PhysicUtil} from "../../common/physic.util";
 import {getVectorMagnitude} from "../../common/util/vector.util";
-import {Shape, ShapeType} from "../../model/shape";
-import {Circle} from "../../model/circle";
+import {Shape, ShapeType} from "../../model/entities/shape";
+import {Circle} from "../../model/entities/circle";
 import {Vector2} from "../../common/util/model/vector2";
 
 const AIR_DENSITY = 1.225; // кг/м^3

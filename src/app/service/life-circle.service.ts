@@ -6,7 +6,7 @@ import {INITIAL_TIME_SPEED, ToolBarService} from "../canvas-page/tool-bar/tool-b
 import {ObjectStorageService} from "./object-storage.service";
 import {debounceTime, Observable, takeUntil, tap} from "rxjs";
 import {ForcesService} from "./forces/forces.service";
-import {Shape} from "../model/shape";
+import {Shape} from "../model/entities/shape";
 
 const MILLIS_IN_SECOND: number = 1000;
 const TIME_SPEED_CHANGE_DELAY: number = 500;

@@ -2,7 +2,7 @@ import {inject, Injectable} from "@angular/core";
 import {Vector2} from "../../common/util/model/vector2";
 import {AppCamera} from "./app-camera";
 import {AppCanvas} from "./app-canvas";
-import {Circle} from "../../model/circle";
+import {Circle} from "../../model/entities/circle";
 
 export const FULL_CIRCLE = 2 * Math.PI;
 
