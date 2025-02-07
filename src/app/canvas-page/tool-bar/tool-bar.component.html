@@ -49,6 +49,16 @@
 <button nz-button class="button" (click)="removeAll()">Clear</button>
 <button nz-button class="button" (click)="removeLast()">Remove last</button>
 
+Time speed
+<nz-slider
+  nzMin="1"
+  nzMax="500"
+  [nzMarks]="timeSpeedMarks"
+  nzTooltipVisible="never"
+  [ngModel]="toolBarService.timeSpeedValue$ | async"
+  (ngModelChange)="toolBarService.timeSpeedValue = $event"
+/>
+
 Radius
 <nz-slider
   nzMin="1"

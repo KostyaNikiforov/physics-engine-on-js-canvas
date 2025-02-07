@@ -1,54 +1,42 @@
 import {Injectable} from "@angular/core";
-import {ObjectStorageService} from "../world/object-storage.service";
 import {Circle} from "../../model/circle";
 import { WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
-import {getDistanceBetweenPoints} from "../../common/position.util";
-import { LifeCircleService} from "../world/life-circle.service";
+import { LifeCircleService} from "../life-circle.service";
 import {PhysicUtil} from "../../common/physic.util";
 import {Shape, ShapeType} from "../../model/shape";
+import {Square} from "../../model/square";
+import {MathUtil} from "../../common/math.util";
 
 const HALF_PI = Math.PI / 2;
 const COSINUS_OF_HALF_PI = Math.cos(HALF_PI);
 const SINUS_OF_HALF_PI = Math.sin(HALF_PI);
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class GravityService {
   private readonly landLevel: number = WORLD_PROPERTY.height;
 
-  constructor(
-    private objectStorageService: ObjectStorageService,
-  ) {
-  }
-
-  applyLangGravity(): void {
-    this.objectStorageService.getAll().forEach(
+  applyLangGravity(shapes: Shape[]): void {
+    shapes.forEach(
       (shape: Shape): void => {
-        if (shape.type !== ShapeType.circle) {
+        const distanceToSurface: number = this.getDistanceToSurface(shape);
+
+        if (distanceToSurface === 0) {
           return;
         }
 
-        const circle: Circle = shape as Circle;
-
-        const distanceToSurface: number
-          = Math.abs(circle.position.y - this.landLevel);
-
         const distance: number = distanceToSurface + 6_378_000;
-        const force: number = PhysicUtil.calculateGravityForceToLand(circle.mass, distance);
+        const force: number = PhysicUtil.calculateGravityForceToLand(shape.mass, distance);
 
-        const accelerationX: number = (force * COSINUS_OF_HALF_PI) / circle.mass;
-        const accelerationY: number = (force * SINUS_OF_HALF_PI) / circle.mass;
+        const accelerationX: number = (force * COSINUS_OF_HALF_PI) / shape.mass;
+        const accelerationY: number = (force * SINUS_OF_HALF_PI) / shape.mass;
 
-        circle.velocity.x += accelerationX * LifeCircleService.timeStepPerFrame;
-        circle.velocity.y += accelerationY * LifeCircleService.timeStepPerFrame;
+        shape.velocity.x += accelerationX * LifeCircleService.timeStepPerFrame;
+        shape.velocity.y += accelerationY * LifeCircleService.timeStepPerFrame;
       }
     );
   }
 
-  apply(): void {
-    const shapes: Shape[] = this.objectStorageService.getAll();
-
+  apply(shapes: Shape[]): void {
     for (let i: number = 0; i < shapes.length; i++) {
       for (let j: number = i + 1; j < shapes.length; j++) {
         if (shapes[i].type !== ShapeType.circle || shapes[j].type !== ShapeType.circle) {
@@ -58,10 +46,10 @@ export class GravityService {
         const circle1: Circle = shapes[i] as Circle;
         const circle2: Circle = shapes[j]  as Circle;
 
-        const distanceX: number = circle1.position.x - circle2.position.x;
-        const distanceY: number = circle1.position.y - circle2.position.y;
+        const distanceX: number = circle1.centerPosition.x - circle2.centerPosition.x;
+        const distanceY: number = circle1.centerPosition.y - circle2.centerPosition.y;
 
-        const distance: number = getDistanceBetweenPoints(circle1.position, circle2.position)
+        const distance: number =  MathUtil.getDistanceBetweenPoints(circle1.centerPosition, circle2.centerPosition)
 
         if (distance <= circle1.radius + circle2.radius) {
           continue;
@@ -93,7 +81,26 @@ export class GravityService {
     }
   }
 
+  private getDistanceToSurface(shape: Shape): number {
+    switch (shape.type) {
+      case ShapeType.circle:
+        return this.getDistanceToSurfaceForCircle(shape as Circle);
+      case ShapeType.square:
+        return this.getDistanceToSurfaceForSquare(shape as Square);
+      default:
+        return 0;
+    }
+  }
+
   private increasedMass(value: number): number {
     return value * 200_000;
+  }
+
+  private getDistanceToSurfaceForCircle(circle: Circle): number {
+    return this.landLevel - circle.centerPosition.y - circle.radius;
+  }
+
+  private getDistanceToSurfaceForSquare(square: Square): number {
+    return this.landLevel - square.centerPosition.y - square.size / 2;
   }
 }

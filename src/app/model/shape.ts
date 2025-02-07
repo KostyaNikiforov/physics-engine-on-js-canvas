@@ -1,28 +1,30 @@
-import {Position} from "../common/util/model/position";
 import {Vector2} from "../common/util/model/vector2";
-import {LifeCircleService} from "../service/world/life-circle.service";
 import {normalizeVector} from "../common/util/vector.util";
+import {MathUtil} from "../common/math.util";
 
-export class Shape {
-  position: Position;
+export type Rotation = {
+  speed: number;
+  point: Vector2;
+};
+
+export abstract class Shape {
   readonly type: ShapeType;
   readonly mass: number;
+  private _rotationSpeed: number; // Radiant per second
+  centerPosition: Vector2;
   velocity: Vector2;
-  rotation: number;
-  rotationSpeedAngle: number;
 
   constructor(
-    position: Position,
+    position: Vector2,
     type: ShapeType,
     speed: number,
     direction: Vector2,
     mass: number,
   ) {
-    this.position = position;
+    this.centerPosition = position;
     this.type = type;
     this.mass = mass;
-    this.rotation = 0;
-    this.rotationSpeedAngle = 0;
+    this._rotationSpeed = 0;
 
     this.velocity = {
       x: speed * direction.x,
@@ -35,13 +37,20 @@ export class Shape {
     return normalizeVector(this.velocity);
   }
 
-  move(): void {
-    this.position.x += this.velocity.x * LifeCircleService.timeStepPerFrame;
-    this.position.y += this.velocity.y * LifeCircleService.timeStepPerFrame;
+  abstract rotate(): void;
+
+  abstract move(): void;
+
+  set rotationSpeed(number: number) {
+    this._rotationSpeed = MathUtil.degreesToRadians(number);
+  }
+
+  get rotationSpeed(): number {
+    return this._rotationSpeed;
   }
 }
 
 export enum ShapeType {
   circle = 'circle',
-  polygon = 'polygon',
+  square = 'square',
 }

@@ -1,6 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {filter, map, Observable, takeUntil, tap} from "rxjs";
-import {Position} from "../../common/util/model/position";
+import { map, Observable, takeUntil, tap} from "rxjs";
 import {
   MouseDrugEventData,
   MouseEventService,
@@ -30,7 +29,7 @@ export class CameraService {
     bottomBorder: WORLD_PROPERTY.height + CAMERA_POSITION_GAP_Y,
   }
 
-  private startCameraPosition: Position;
+  private startCameraPosition: Vector2;
 
   constructor(
     private mouseEventService: MouseEventService,
@@ -42,8 +41,8 @@ export class CameraService {
     return this._camera;
   }
 
-  readonly changes$: Observable<Position | null> = this.mouseEventService.mouseEvent$.pipe(
-    map((event: MouseEventData): Position => {
+  readonly changes$: Observable<Vector2 | null> = this.mouseEventService.mouseEvent$.pipe(
+    map((event: MouseEventData): Vector2 => {
       switch (event.type) {
         case MouseEventType.DOWN:
           this.startCameraPosition = {
@@ -52,7 +51,7 @@ export class CameraService {
           }
           return null;
         case MouseEventType.DRUG:
-          const newCameraPosition: Position
+          const newCameraPosition: Vector2
             = this.toNewCameraPosition(event as MouseDrugEventData)
 
           this.updateCameraPosition(newCameraPosition)
@@ -90,18 +89,18 @@ export class CameraService {
   moveCameraToBottomCenter(): void {
     this.camera.moveTo(
       WORLD_PROPERTY.width / 2 - this.camera.pxToMeter(this.camera.widthPx) / 2,
-      WORLD_PROPERTY.height - (this.camera.pxToMeter(this.camera.heightPx) - 3),
+      WORLD_PROPERTY.height - (this.camera.pxToMeter(this.camera.heightPx) - 2),
     )
   }
 
-  private toNewCameraPosition(mouseDrugEventData: MouseDrugEventData): Position {
+  private toNewCameraPosition(mouseDrugEventData: MouseDrugEventData): Vector2 {
     return {
       x: this.startCameraPosition.x - this._camera.pxToMeter(mouseDrugEventData.vector.x),
       y: this.startCameraPosition.y - this._camera.pxToMeter(mouseDrugEventData.vector.y),
     }
   }
 
-  private updateCameraPosition(position: Position): void {
+  private updateCameraPosition(position: Vector2): void {
     this._camera.position.x = position.x;
     this._camera.position.y = position.y;
   }

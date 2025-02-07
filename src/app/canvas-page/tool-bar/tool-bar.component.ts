@@ -7,9 +7,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {NzSwitchComponent} from "ng-zorro-antd/switch";
-import {ObjectStorageService} from "../../service/world/object-storage.service";
+import {ObjectStorageService} from "../../service/object-storage.service";
 import {FormsModule} from "@angular/forms";
-import {ToolBarService} from "../../service/control/tool-bar.service";
+import {ToolBarService} from "./tool-bar.service";
 import {NzButtonComponent} from "ng-zorro-antd/button";
 import {NzInputDirective} from "ng-zorro-antd/input";
 import {NzMarks, NzSliderModule} from "ng-zorro-antd/slider";
@@ -55,6 +55,19 @@ export class ToolBarComponent {
     50: '50',
     75: '75',
     100: '100',
+  }
+  readonly timeSpeedMarks: NzMarks = {
+    10: '0.1',
+    50: '0.5',
+    100: '1',
+    150: '1.5',
+    200: '2',
+    250: '2.5',
+    300: '3',
+    350: '3.5',
+    400: '4',
+    450: '4.5',
+    500: '5',
   }
 
   readonly objectsNumber$: Observable<number> = this.objectStorageService.objectsNumber$;

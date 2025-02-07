@@ -1,6 +1,5 @@
 import {inject, Injectable} from "@angular/core";
-import {filter, fromEvent, map, mergeWith, Observable, tap} from "rxjs";
-import {Position} from "../../common/util/model/position";
+import {filter, fromEvent, map, mergeWith, Observable} from "rxjs";
 import {Vector2} from "../../common/util/model/vector2";
 import {AppMouse} from "../rendar/app-mouse";
 import {AppCamera} from "../rendar/app-camera";
@@ -15,7 +14,7 @@ const EVENT_NAME = {
 export interface MouseEventData {
   type: MouseEventType;
   direction?: Vector2;
-  position: Position;
+  position: Vector2;
 }
 
 export interface MouseClickEventData extends MouseEventData {
@@ -24,7 +23,7 @@ export interface MouseClickEventData extends MouseEventData {
 
 export interface MouseDrugEventData extends MouseEventData {
   type: MouseEventType.DRUG;
-  startPosition: Position;
+  startPosition: Vector2;
   vector: Vector2;
 }
 
@@ -63,7 +62,7 @@ export class MouseEventService {
       map((event: MouseEventData): MouseClickEventData => event as MouseClickEventData),
     );
 
-  private mouseDownPosition: Position;
+  private mouseDownPosition: Vector2;
 
   private mouseDownTime: number;
 

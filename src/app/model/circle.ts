@@ -1,41 +1,21 @@
 import {Shape, ShapeType} from "./shape";
 import {Vector2} from "../common/util/model/vector2";
-import {Position} from "../common/util/model/position";
 import {MathUtil} from "../common/math.util";
-import {MATERIALS, MaterialType} from "./material";
-import {LifeCircleService} from "../service/world/life-circle.service";
+import {MaterialType} from "./material";
+import {LifeCircleService} from "../service/life-circle.service";
 import {FULL_CIRCLE} from "../service/rendar/drawing.service";
-
-const colors = [
-  "#FF6633",
-  "#FFB399",
-  "#FF33FF",
-  "#FFFF99",
-  "#00B3E6",
-  "#E6B333",
-  "#3366E6",
-  "#999966",
-  "#809980",
-  "#E6FF80",
-  "#1AFF33",
-  "#999933",
-  "#FF3380",
-  "#CCCC00",
-  "#66E64D",
-  "#4D80CC",
-  "#FF4D4D",
-  "#99E6E6",
-  "#6666FF"
-];
+import {COLORS} from "../common/colors";
+import {PhysicUtil} from "../common/physic.util";
 
 export class Circle extends Shape {
+  private _rotation: number;
   radius: number;
   square: number;
   circuit: number;
   color: string;
 
   constructor(
-    position: Position,
+    position: Vector2,
     radius: number,
     speed: number,
     direction: Vector2,
@@ -46,21 +26,35 @@ export class Circle extends Shape {
       ShapeType.circle,
       speed,
       direction,
-      MathUtil.getCircleSquare(radius) * MATERIALS[materialType].density
+      PhysicUtil.calculateCircleMass(radius, materialType),
     );
 
+    this._rotation = 0;
     this.radius = radius;
     this.square = MathUtil.getCircleSquare(radius);
     this.circuit = MathUtil.getCircleCircuit(radius);
-    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
   }
 
   setRotationSpeed(speed: number): void {
-    this.rotationSpeedAngle
+    this.rotationSpeed
       = FULL_CIRCLE * (speed / this.circuit)  * LifeCircleService.timeStepPerFrame
   }
 
-  rotate(): void {
-    this.rotation += this.rotationSpeedAngle;
+  override rotate(): void {
+    this.rotation += this.rotationSpeed
+  }
+
+  override move(): void {
+    this.centerPosition.x += this.velocity.x * LifeCircleService.timeStepPerFrame;
+    this.centerPosition.y += this.velocity.y * LifeCircleService.timeStepPerFrame;
+  }
+
+  get rotation(): number {
+    return this._rotation;
+  }
+
+  set rotation(number: number) {
+    this._rotation = number;
   }
 }

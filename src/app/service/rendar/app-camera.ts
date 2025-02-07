@@ -3,8 +3,8 @@ import {Vector3} from "../../common/util/model/vector3";
 import {Vector2} from "../../common/util/model/vector2";
 
 export const Z_STEP_SIZE = 0.5;
-export const Z_RANGE = { min: 5, max: 100 };
-export const INITIAL_Z = 20;
+export const Z_RANGE = { min: 10, max: 150 };
+export const INITIAL_Z = 10;
 const INITIAL_CAMERA = { x: 0, y: 0, z: INITIAL_Z };
 
 @Injectable({
@@ -16,6 +16,8 @@ export class AppCamera {
   private _position: Vector3;
   private _widthPx: number;
   private _heightPx: number;
+  private _width: number;
+  private _height: number;
 
   private _scale: number;
 
@@ -72,6 +74,14 @@ export class AppCamera {
     return this._heightPx;
   }
 
+  get width(): number {
+    return this._width;
+  }
+
+  get height(): number {
+    return this._height;
+  }
+
   get canvasPosition(): Vector2 {
     return this._canvasPosition;
   }
@@ -106,6 +116,7 @@ export class AppCamera {
       return;
     }
 
+    console.log('moveForward', this.z, Z_RANGE.min);
     this.keepCursorPosition(mousePosition, (): void => { this.z -= Z_STEP_SIZE; });
   }
 
@@ -132,6 +143,8 @@ export class AppCamera {
 
   private updateScale(): void {
     this._scale = this._widthPx / (this._position.z * 2);
+    this._width = this.pxToMeter(this.widthPx);
+    this._height = this.pxToMeter(this.heightPx);
   }
 
   private resetCanvasSize(canvasElement: HTMLCanvasElement): void {

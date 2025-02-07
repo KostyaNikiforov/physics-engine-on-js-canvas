@@ -1,20 +1,35 @@
 import {Injectable} from "@angular/core";
+import {BehaviorSubject, map, Observable, startWith, Subject} from "rxjs";
+
+const TIME_SPEED_COEFFICIENT: number = 100;
+
+export const INITIAL_TIME_SPEED: number = 1;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToolBarService {
-  private isLandGravityEnabled: boolean = false;
-  private isAirResistanceEnabled: boolean = false;
+  private readonly timeSpeed: Subject<number> = new Subject<number>();
+  readonly timeSpeedChanged$: Observable<number> = this.timeSpeed.asObservable();
+  readonly timeSpeedValue$: Observable<number> = this.timeSpeed.pipe(
+    startWith(INITIAL_TIME_SPEED),
+    map((value: number): number => value * TIME_SPEED_COEFFICIENT)
+  );
+
+  private isLandGravityEnabled: boolean = true;
+  private isAirResistanceEnabled: boolean = true;
   private isGravityEnabled: boolean = false;
-  private isCollisionEnabled: boolean = false;
+  private isCollisionEnabled: boolean = true;
   private isBorderCollisionEnabled: boolean = true;
-  private isRotationEnabled: boolean = false;
   private isPaused: boolean = false;
 
-  private circleRadius: number = 1;
-  private _speed: number = 5;
+  private circleRadius: number = 10;
+  private _speed: number = 0;
   private _direction: number = 0;
+
+  set timeSpeedValue(value: number) {
+    this.timeSpeed.next(value / TIME_SPEED_COEFFICIENT);
+  }
 
   get direction(): number {
     return this._direction;
@@ -44,10 +59,6 @@ export class ToolBarService {
     return this.isLandGravityEnabled;
   }
 
-  get rotationEnabled(): boolean {
-    return this.isRotationEnabled;
-  }
-
   get borderCollisionEnabled(): boolean {
     return this.isBorderCollisionEnabled;
   }
@@ -66,10 +77,6 @@ export class ToolBarService {
 
   get paused(): boolean {
     return this.isPaused;
-  }
-
-  switchRotation(isEnabled: boolean = !this.isRotationEnabled): void {
-    this.isRotationEnabled = isEnabled;
   }
 
   switchBorderCollision(isEnabled: boolean = !this.isBorderCollisionEnabled): void {
