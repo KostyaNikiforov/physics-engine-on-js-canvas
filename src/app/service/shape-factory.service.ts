@@ -18,8 +18,6 @@ export class ShapeFactoryService {
     properties: ShapeProperties,
     materialType?: MaterialType,
   ): Shape {
-    console.log('Creating shape', type, position, properties, materialType);
-
     switch (type) {
       case ShapeType.circle:
         return this.createCircle(position, properties);

@@ -24,7 +24,7 @@ export class CollisionDetectionService {
   private readonly objectRenderingService: ObjectRenderingService = inject(ObjectRenderingService);
   private readonly toolBarService: ToolBarService = inject(ToolBarService);
 
-  private readonly borderShape: Shape = new Border();
+  private readonly borderShape: Shape = new Border(Number.MAX_SAFE_INTEGER);
 
   apply(shapes: Shape[]): void {
     if (this.toolBarService.collisionEnabled) {
@@ -190,9 +190,6 @@ export class CollisionDetectionService {
       {x: WORLD_PROPERTY.width, y: WORLD_PROPERTY.height},
     ];
 
-    //console.log(this.GJKAlgorithm(square.points, land));;
-
-    //console.log(dot(support, {x: 0, y: 1}) <= 0);
 
     /*this.objectRenderingService.draw((drawingService, toX, toY) => {
       drawingService.drawPoint({ x: toX(distance.x), y: toY(WORLD_PROPERTY.height + distance.y) }, '#f00');

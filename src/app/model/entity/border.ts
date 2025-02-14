@@ -1,24 +1,19 @@
 import {Shape} from "./shape";
-import {Vector2} from "../../common/util/model/vector2";
 import {ShapeType} from "./property";
+import {zero} from "../../common/util/vector.util";
 
 export class Border extends Shape {
-  constructor() {
+  constructor(mass: number) {
     super(
-      { x: 0, y: 0 },
+      zero(),
       ShapeType.border,
       0,
-      {
-        x: 0,
-        y: 0,
-      },
-      Number.MAX_SAFE_INTEGER,
+      zero(),
+      mass,
     );
   }
 
-  override moveOn(vector: Vector2): void {
-  }
+  override moveOn(): void { }
 
-  override rotateOn(degree: number): void {
-  }
+  override rotateOn(): void { }
 }

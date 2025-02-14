@@ -7,6 +7,10 @@ export function getCenterOfVectors(points: Vector2[]): Vector2 {
   };
 }
 
+export function zero(): Vector2 {
+  return { x: 0, y: 0 };
+}
+
 export function copyVector(vector: Vector2): Vector2 {
   return { x: vector.x, y: vector.y };
 }

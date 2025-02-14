@@ -52,8 +52,6 @@ export class CollisionResolvingService {
     const collisionPoint: Vector2 = getCenterOfVectors(overlap.points);
     const normalizedVectorToCollisionPoint: Vector2 = normalizeVector(subtractVectors(square.position, collisionPoint));
 
-    //console.log(dot(normalizedVectorToCollisionPoint, square.direction()));
-
     const rotationSpeedInMeters: number = MathUtil.findCathetusLength(square.velocity, normalizedVectorToCollisionPoint);
 
     const rotationSpeedInDegrees: number = FULL_CIRCLE * (rotationSpeedInMeters / MathUtil.getCircleSquare(getVectorMagnitude(normalizedVectorToCollisionPoint)));
