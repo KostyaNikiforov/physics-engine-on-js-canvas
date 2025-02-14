@@ -1,11 +1,10 @@
 import {Injectable} from "@angular/core";
-import {Circle} from "../../model/entities/circle";
 import { WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import { LifeCircleService} from "../life-circle.service";
-import {PhysicUtil} from "../../common/physic.util";
-import {Shape, ShapeType} from "../../model/entities/shape";
-import {Square} from "../../model/entities/square";
-import {MathUtil} from "../../common/math.util";
+import {PhysicUtil} from "../../common/util/physic.util";
+import {Circle, Shape, Square} from "../../model/entity";
+import {MathUtil} from "../../common/util/math.util";
+import {ShapeType} from "../../model/entity/property";
 
 const HALF_PI = Math.PI / 2;
 const COSINUS_OF_HALF_PI = Math.cos(HALF_PI);
@@ -14,6 +13,7 @@ const SINUS_OF_HALF_PI = Math.sin(HALF_PI);
 @Injectable({ providedIn: 'root' })
 export class GravityService {
   private readonly landLevel: number = WORLD_PROPERTY.height;
+  private readonly forceName: string = 'gravity';
 
   applyLangGravity(shapes: Shape[]): void {
     shapes.forEach(
@@ -27,11 +27,10 @@ export class GravityService {
         const distance: number = distanceToSurface + 6_378_000;
         const force: number = PhysicUtil.calculateGravityForceToLand(shape.mass, distance);
 
-        const accelerationX: number = (force * COSINUS_OF_HALF_PI) / shape.mass;
-        const accelerationY: number = (force * SINUS_OF_HALF_PI) / shape.mass;
+        const accelerationX: number = 0;
+        const accelerationY: number = force * SINUS_OF_HALF_PI / shape.mass;
 
-        shape.velocity.x += accelerationX * LifeCircleService.timeStepPerFrame;
-        shape.velocity.y += accelerationY * LifeCircleService.timeStepPerFrame;
+        shape.setForce(this.forceName, { x: accelerationX, y: accelerationY });
       }
     );
   }
@@ -46,10 +45,10 @@ export class GravityService {
         const circle1: Circle = shapes[i] as Circle;
         const circle2: Circle = shapes[j]  as Circle;
 
-        const distanceX: number = circle1.centerPosition.x - circle2.centerPosition.x;
-        const distanceY: number = circle1.centerPosition.y - circle2.centerPosition.y;
+        const distanceX: number = circle1.position.x - circle2.position.x;
+        const distanceY: number = circle1.position.y - circle2.position.y;
 
-        const distance: number =  MathUtil.getDistanceBetweenPoints(circle1.centerPosition, circle2.centerPosition)
+        const distance: number =  MathUtil.getDistanceBetweenPoints(circle1.position, circle2.position)
 
         if (distance <= circle1.radius + circle2.radius) {
           continue;
@@ -97,10 +96,10 @@ export class GravityService {
   }
 
   private getDistanceToSurfaceForCircle(circle: Circle): number {
-    return this.landLevel - circle.centerPosition.y - circle.radius;
+    return this.landLevel - circle.position.y - circle.radius;
   }
 
   private getDistanceToSurfaceForSquare(square: Square): number {
-    return this.landLevel - square.centerPosition.y - square.size / 2;
+    return this.landLevel - square.position.y - square.size / 2;
   }
 }

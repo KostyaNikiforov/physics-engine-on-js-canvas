@@ -8,4 +8,8 @@ export class ArrayUtil {
 
     return result;
   }
+
+  static empty<T>(): T[] {
+    return []
+  }
 }

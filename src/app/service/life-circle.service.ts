@@ -1,12 +1,13 @@
 import {inject, Injectable} from "@angular/core";
 import {ObjectRenderingService} from "./rendar/object-rendering.service";
 import {MovementService} from "./movement/movement.service";
-import {CollisionService} from "./collision/collision.service";
+import {CollisionDetectionService} from "./collision/collision-detection.service";
 import {INITIAL_TIME_SPEED, ToolBarService} from "../canvas-page/tool-bar/tool-bar.service";
 import {ObjectStorageService} from "./object-storage.service";
 import {debounceTime, Observable, takeUntil, tap} from "rxjs";
 import {ForcesService} from "./forces/forces.service";
-import {Shape} from "../model/entities/shape";
+import {Shape} from "../model/entity/shape";
+import {ContactResolvingService} from "./collision/contact-resolving.service";
 
 const MILLIS_IN_SECOND: number = 1000;
 const TIME_SPEED_CHANGE_DELAY: number = 500;
@@ -14,18 +15,21 @@ const TIME_SPEED_CHANGE_DELAY: number = 500;
 @Injectable({ providedIn: 'root' })
 export class LifeCircleService {
   private readonly forcesService: ForcesService = inject(ForcesService);
+  private readonly contactResolvingService: ContactResolvingService = inject(ContactResolvingService);
 
   private static readonly fps: number = 60;
-  private static readonly _timeStepPerFrame: number = 1 / LifeCircleService.fps;
 
-  private readonly _timeFrame: number = MILLIS_IN_SECOND / LifeCircleService.fps;
+  private readonly defaultTimeFrame: number = MILLIS_IN_SECOND / LifeCircleService.fps;
+  private timeFrame: number = this.defaultTimeFrame;
+
+  private static _timeStepPerFrame: number = 1 / LifeCircleService.fps;
 
   private physicalLoopRefreshIntervalId: any;
 
   constructor(
     private toolBarService: ToolBarService,
     private movementService: MovementService,
-    private collisionService: CollisionService,
+    private collisionService: CollisionDetectionService,
     private renderingService: ObjectRenderingService,
     private objectStorageService: ObjectStorageService,
   ) {
@@ -35,29 +39,33 @@ export class LifeCircleService {
     return this._timeStepPerFrame;
   }
 
+
   run(destroy: Observable<boolean>): void {
     this.startPhysicalLoop(INITIAL_TIME_SPEED);
     this.startRenderLoop();
 
     this.subscribeToTimeSpeedChanges(destroy);
-  }
-
-  private stopPhysicalLoop(): void {
-    clearInterval(this.physicalLoopRefreshIntervalId);
-  }
-
-  private startPhysicalLoop(timeSpeed: number): void {
-    this.physicalLoopRefreshIntervalId = setInterval(
-      this.applyForcesAndMove.bind(this),
-      this._timeFrame / timeSpeed,
-    );
+    this.subscribeToFrameSpeedChanges(destroy);
   }
 
   private startRenderLoop(): void {
     setInterval(
       this.renderingService.render.bind(this.renderingService),
-      this._timeFrame,
+      this.defaultTimeFrame,
     );
+  }
+
+  private startPhysicalLoop(timeSpeed: number): void {
+    this.timeFrame = this.defaultTimeFrame / timeSpeed;
+
+    this.physicalLoopRefreshIntervalId = setInterval(
+      this.applyForcesAndMove.bind(this),
+      this.timeFrame,
+    );
+  }
+
+  private stopPhysicalLoop(): void {
+    clearInterval(this.physicalLoopRefreshIntervalId);
   }
 
   private applyForcesAndMove(): void {
@@ -68,13 +76,26 @@ export class LifeCircleService {
     const allShapes: Shape[] = this.objectStorageService.getAll();
 
     this.forcesService.apply(allShapes);
+
     this.collisionService.apply(allShapes);
 
     this.movementService.move(allShapes);
+
+    this.contactResolvingService.resolve(allShapes);
   }
 
   private subscribeToTimeSpeedChanges(destroy: Observable<boolean>): void {
     this.toolBarService.timeSpeedChanged$.pipe(
+      takeUntil(destroy),
+      debounceTime(TIME_SPEED_CHANGE_DELAY),
+      tap((timeSpeed: number): void => {
+        LifeCircleService._timeStepPerFrame = 1 / LifeCircleService.fps * timeSpeed;
+      }),
+    ).subscribe();
+  }
+
+  private subscribeToFrameSpeedChanges(destroy: Observable<boolean>): void {
+    this.toolBarService.frameSpeedChanged$.pipe(
       takeUntil(destroy),
       debounceTime(TIME_SPEED_CHANGE_DELAY),
       tap((): void => {

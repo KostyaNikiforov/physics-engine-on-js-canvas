@@ -3,12 +3,11 @@ import {WORLD_PROPERTY} from "../../canvas-page/canvas-page.component";
 import {CameraService} from "./camera.service";
 import {DrawingService} from "./drawing.service";
 import {ObjectStorageService} from "../object-storage.service";
-import {Shape, ShapeType} from "../../model/entities/shape";
-import {Circle} from "../../model/entities/circle";
 import {getFilledBackgroundPicture} from "../../common/drawable/world-background";
 import {Vector2} from "../../common/util/model/vector2";
 import {AppCamera} from "./app-camera";
-import {Square} from "../../model/entities/square";
+import {Circle, Shape, Square} from "../../model/entity";
+import {ShapeType} from "../../model/entity/property";
 
 type AdditionalDrawingFunc = (drawingService: DrawingService, toX: (value: number) => number, toY: (value: number) => number) => void
 
@@ -83,11 +82,11 @@ export class ObjectRenderingService {
 
     this.drawingService.drawCircle(
       {
-        x: this.toX(circle.centerPosition.x),
-        y: this.toY(circle.centerPosition.y),
+        x: this.toX(circle.position.x),
+        y: this.toY(circle.position.y),
       },
       this.camera.meterToPx(circle.radius),
-      circle.rotation,
+      circle.rotationState,
       circle.color,
     );
   }
@@ -128,17 +127,17 @@ export class ObjectRenderingService {
 
 
   private isCircleOutOfCameraView(circle: Circle): boolean {
-    return circle.centerPosition.x > this.camera.position.x + this.camera.width + circle.radius
-      || circle.centerPosition.x < this.camera.position.x - this.camera.width - circle.radius
-      || circle.centerPosition.y > this.camera.position.y + this.camera.height + circle.radius
-      || circle.centerPosition.y < this.camera.position.y - this.camera.height - circle.radius;
+    return circle.position.x > this.camera.position.x + this.camera.width + circle.radius
+      || circle.position.x < this.camera.position.x - this.camera.width - circle.radius
+      || circle.position.y > this.camera.position.y + this.camera.height + circle.radius
+      || circle.position.y < this.camera.position.y - this.camera.height - circle.radius;
   }
 
   private isSquareOutOfCameraView(square: Square): boolean {
-    return square.centerPosition.x > this.camera.position.x + this.camera.width + square.size
-      || square.centerPosition.x < this.camera.position.x - this.camera.width - square.size
-      || square.centerPosition.y > this.camera.position.y + this.camera.height + square.size
-      || square.centerPosition.y < this.camera.position.y - this.camera.height - square.size;
+    return square.position.x > this.camera.position.x + this.camera.width + square.size
+      || square.position.x < this.camera.position.x - this.camera.width - square.size
+      || square.position.y > this.camera.position.y + this.camera.height + square.size
+      || square.position.y < this.camera.position.y - this.camera.height - square.size;
   }
 
   private isPictureOutOfCameraView(startPosition: Vector2, endPosition: Vector2): boolean {

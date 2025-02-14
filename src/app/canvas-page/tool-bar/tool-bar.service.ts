@@ -16,6 +16,13 @@ export class ToolBarService {
     map((value: number): number => value * TIME_SPEED_COEFFICIENT)
   );
 
+  private readonly frameSpeed: Subject<number> = new Subject<number>();
+  readonly frameSpeedChanged$: Observable<number> = this.frameSpeed.asObservable();
+  readonly frameSpeedValue$: Observable<number> = this.frameSpeed.pipe(
+    startWith(INITIAL_TIME_SPEED),
+    map((value: number): number => value * TIME_SPEED_COEFFICIENT)
+  );
+
   private isLandGravityEnabled: boolean = true;
   private isAirResistanceEnabled: boolean = true;
   private isGravityEnabled: boolean = false;
@@ -29,6 +36,10 @@ export class ToolBarService {
 
   set timeSpeedValue(value: number) {
     this.timeSpeed.next(value / TIME_SPEED_COEFFICIENT);
+  }
+
+  set frameSpeedValue(value: number) {
+    this.frameSpeed.next(value / TIME_SPEED_COEFFICIENT);
   }
 
   get direction(): number {

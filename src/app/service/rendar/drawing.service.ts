@@ -2,7 +2,7 @@ import {inject, Injectable} from "@angular/core";
 import {Vector2} from "../../common/util/model/vector2";
 import {AppCamera} from "./app-camera";
 import {AppCanvas} from "./app-canvas";
-import {Circle} from "../../model/entities/circle";
+import {Circle} from "../../model/entity/circle";
 
 export const FULL_CIRCLE = 2 * Math.PI;
 
@@ -25,6 +25,24 @@ export class DrawingService {
     });
     this.canvas.context.lineTo(position.x, position.y);
     this.canvas.context.stroke();
+    this.canvas.context.closePath();
+  }
+
+  drawLine(startPosition: Vector2, endPosition: Vector2, color?: string): void {
+    this.canvas.context.beginPath();
+    this.canvas.context.moveTo(startPosition.x, startPosition.y);
+    this.canvas.context.lineTo(endPosition.x, endPosition.y);
+    this.canvas.context.lineWidth = 1;
+    this.canvas.context.strokeStyle = color || 'black';
+    this.canvas.context.stroke();
+    this.canvas.context.closePath();
+  }
+
+  drawPoint(position: Vector2, color?: string): void {
+    this.canvas.context.beginPath();
+    this.canvas.context.arc(position.x, position.y, 2, 0, FULL_CIRCLE, true);
+    this.canvas.context.fillStyle = color || 'black';
+    this.canvas.context.fill();
     this.canvas.context.closePath();
   }
 
@@ -54,13 +72,13 @@ export class DrawingService {
       FULL_CIRCLE,
       true
     );
-    //this.canvas.context.moveTo(position.x, position.y);
-    /*this.canvas.context.lineTo(
+    this.canvas.context.moveTo(position.x, position.y);
+    this.canvas.context.lineTo(
       position.x + Math.cos(rotation) * radius,
       position.y + Math.sin(rotation) * radius,
-    );*/
+    );
     this.canvas.context.lineWidth = 1;
-    // this.canvas.context.strokeStyle = color || 'black';
+    //this.canvas.context.strokeStyle = color || 'black';
     this.canvas.context.stroke();
     this.canvas.context.closePath();
   }

@@ -2,13 +2,14 @@ import {inject, Injectable} from "@angular/core";
 import {MouseClickEventData, MouseEventService} from "./control/mouse-event.service";
 import {Observable, takeUntil, tap} from "rxjs";
 import {ObjectStorageService} from "./object-storage.service";
-import {Shape, ShapeType} from "../model/entities/shape";
+import {Shape} from "../model/entity";
 import {ShapeFactoryService} from "./shape-factory.service";
 import {AppCamera} from "./rendar/app-camera";
 import {ToolBarService} from "../canvas-page/tool-bar/tool-bar.service";
-import {MathUtil} from "../common/math.util";
+import {MathUtil} from "../common/util/math.util";
 import {MaterialType} from "../model/material";
 import {Vector2} from "../common/util/model/vector2";
+import {ShapeType} from "../model/entity/property";
 
 @Injectable({ providedIn: 'root' })
 export class ShapeCreationService {
@@ -26,7 +27,7 @@ export class ShapeCreationService {
   }
 
   private handleClick(eventData: MouseClickEventData): void {
-    this.createSquare(eventData);
+    this.createCircle(eventData);
   }
 
   private createCircle(eventData: MouseClickEventData): void {
@@ -55,7 +56,9 @@ export class ShapeCreationService {
       MaterialType.WOOD
     );
 
-    shape.rotationSpeed = 1;
+    //shape.setRotationSpeedInDegrees(30);
+
+    shape.rotateOn(20);
 
     this.objectStorageService.add(shape);
   }

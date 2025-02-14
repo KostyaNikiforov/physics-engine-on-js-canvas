@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Shape} from "../model/entities/shape";
+import {Shape} from "../model/entity/shape";
 import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
@@ -30,7 +30,8 @@ export class ObjectStorageService {
   }
 
   removeLast(): void {
-    this.objectsNumber.next(this.objects.length - 1);
-    this.objects.pop();
+    if (this.objects.pop()) {
+      this.objectsNumber.next(this.objects.length - 1);
+    }
   }
 }

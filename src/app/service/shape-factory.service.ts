@@ -1,10 +1,9 @@
 import {Injectable} from "@angular/core";
-import {Shape, ShapeType} from "../model/entities/shape";
 import {ShapeProperties} from "../model/shape-properties";
-import {Circle} from "../model/entities/circle";
-import {Square} from "../model/entities/square";
+import {Circle, Shape, Square} from "../model/entity";
 import {MaterialType} from "../model/material";
 import {Vector2} from "../common/util/model/vector2";
+import {ShapeType} from "../model/entity/property";
 
 const DEGREES_POINT = Math.PI / 180;
 const DENSITY = 7.8 // Metal density in g/cm^3;
@@ -19,6 +18,8 @@ export class ShapeFactoryService {
     properties: ShapeProperties,
     materialType?: MaterialType,
   ): Shape {
+    console.log('Creating shape', type, position, properties, materialType);
+
     switch (type) {
       case ShapeType.circle:
         return this.createCircle(position, properties);

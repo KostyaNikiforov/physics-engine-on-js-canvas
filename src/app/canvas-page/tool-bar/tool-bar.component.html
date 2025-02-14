@@ -59,6 +59,16 @@ Time speed
   (ngModelChange)="toolBarService.timeSpeedValue = $event"
 />
 
+Frame speed
+<nz-slider
+  nzMin="1"
+  nzMax="500"
+  [nzMarks]="timeSpeedMarks"
+  nzTooltipVisible="never"
+  [ngModel]="toolBarService.frameSpeedValue$ | async"
+  (ngModelChange)="toolBarService.frameSpeedValue = $event"
+/>
+
 Radius
 <nz-slider
   nzMin="1"

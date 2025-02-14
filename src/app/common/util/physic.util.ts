@@ -1,5 +1,5 @@
 import {MathUtil} from "./math.util";
-import {MATERIALS, MaterialType} from "../model/material";
+import {MATERIALS, MaterialType} from "../../model/material";
 
 const G: number = 6.674 * Math.pow(10, -11);
 const LAND_MASS = 5.972 * Math.pow(10, 24);

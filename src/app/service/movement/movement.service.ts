@@ -1,14 +1,14 @@
-import {Injectable} from "@angular/core";
-import {Shape} from "../../model/entities/shape";
+import {inject, Injectable} from "@angular/core";
+import {Circle, Shape} from "../../model/entity";
+import {ShapeMovementStrategyService} from "./shape-movement-strategy/shape-movement-strategy.service";
 
 @Injectable({ providedIn: 'root' })
 export class MovementService {
-  move(shapes: Shape[]): void {
-      shapes.forEach(this.moveShape.bind(this));
-  }
+  private readonly shapeMovementStrategyService = inject(ShapeMovementStrategyService);
 
-  private moveShape(shape: Shape): void {
-    shape.move();
-    shape.rotate();
+  move(shapes: Shape[]): void {
+    shapes.forEach(
+      this.shapeMovementStrategyService.move.bind(this.shapeMovementStrategyService)
+    );
   }
 }

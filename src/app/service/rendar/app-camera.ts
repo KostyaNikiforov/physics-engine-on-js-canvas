@@ -116,7 +116,6 @@ export class AppCamera {
       return;
     }
 
-    console.log('moveForward', this.z, Z_RANGE.min);
     this.keepCursorPosition(mousePosition, (): void => { this.z -= Z_STEP_SIZE; });
   }
 
